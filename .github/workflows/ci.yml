@@ -10,7 +10,7 @@ env:
   JUPYTER_PLATFORM_DIRS: '1'
 
 jobs:
-  linux:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,16 +20,16 @@ jobs:
           - python-version: '3.13'
             extras: min
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         filter: blob:none
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: hynek/setup-cached-uv@v2
+    - uses: astral-sh/setup-uv@v6
       with:
-        cache-dependency-path: pyproject.toml
+        enable-cache: true
     - run: uv pip install --system -e .[${{ matrix.extras == 'min' && 'test' || 'test,jupyter' }}]
     - uses: pavelzw/pytest-action@v2
       with:
@@ -38,3 +38,12 @@ jobs:
         verbose: true
         job-summary: true
         emoji: false
+  check:
+    if: always()
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+        - uses: re-actors/alls-green@release/v1
+          with:
+            jobs: ${{ toJSON(needs) }}
