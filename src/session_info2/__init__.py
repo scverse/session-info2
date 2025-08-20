@@ -12,6 +12,7 @@ from functools import cached_property
 from importlib.metadata import version
 from types import MappingProxyType, ModuleType
 from typing import TYPE_CHECKING, Any, Literal, TypeAlias
+from warnings import catch_warnings, filterwarnings
 
 from . import _pu
 from ._dists import packages_distributions
@@ -118,12 +119,15 @@ class SessionInfo:
     def _version(self, dist: str) -> str:
         """Get version(s) of imported distribution."""
         v_meta = version(dist)
-        vs_attr = {
-            pkg_name: v
-            for pkg_name in self.dist2pkgs[dist]
-            if (pkg := sys.modules.get(pkg_name))
-            and (v := getattr(pkg, "__version__", None))
-        }
+        with catch_warnings():
+            filterwarnings("ignore", category=DeprecationWarning)
+            filterwarnings("ignore", category=FutureWarning)
+            vs_attr = {
+                pkg_name: v
+                for pkg_name in self.dist2pkgs[dist]
+                if (pkg := sys.modules.get(pkg_name))
+                and (v := getattr(pkg, "__version__", None))
+            }
         if all(v_attr == v_meta for v_attr in vs_attr.values()):
             # This branch is also hit if there are no __version__ attributes
             return v_meta
