@@ -1,3 +1,39 @@
+/* derive jupyter colors from furo colors:
+   https://github.com/pradyunsg/furo/blob/main/src/furo/assets/styles/variables/_colors.scss */
+:root[data-theme],
+:root:has(body[data-theme]),
+.cell_output,
+.jupyter-widgets {
+	/* UI Fonts */
+	--jp-ui-font-color0: var(--color-foreground-primary);
+	--jp-ui-font-color1: var(--color-foreground-primary);
+	--jp-ui-font-color2: var(--color-foreground-secondary);
+	--jp-ui-font-color3: var(--color-foreground-muted);
+
+	/* Content Fonts */
+	--jp-content-font-color0: var(--color-foreground-primary);
+	--jp-content-font-color1: var(--color-foreground-primary);
+	--jp-content-font-color2: var(--color-foreground-secondary);
+	--jp-content-font-color3: var(--color-foreground-muted);
+
+	/* Layout */
+	--jp-layout-color0: var(--color-background-primary);
+	--jp-layout-color1: var(--color-background-primary);
+	--jp-layout-color2: var(--color-background-secondary);
+	--jp-layout-color3: var(--color-background-item);
+
+	/* Brand/accent */
+	--jp-brand-color0: var(--color-brand-primary);
+	--jp-brand-color1: var(--color-brand-primary);
+	--jp-brand-color2: var(--color-brand-primary);
+	--jp-brand-color3: var(--color-brand-primary);
+
+	--jp-accent-color0: var(--color-brand-content);
+	--jp-accent-color1: var(--color-brand-content);
+	--jp-accent-color2: var(--color-brand-content);
+	--jp-accent-color3: var(--color-brand-content);
+}
+
 .sphinx-codeautolink-a:link,
 .sphinx-codeautolink-a:link * {
 	text-decoration: underline;
