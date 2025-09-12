@@ -112,7 +112,9 @@ def _fmt_html(header: _TableHeader, rows: Iterable[tuple[str, str]]) -> str:
         return ""
 
     header_bg = "var(--jp-layout-color0, var(--vscode-editor-background, #f8f9fa))"
-    header_fg = row_fg = "var(--jp-ui-font-color1, var(--vscode-editor-foreground, #212529))"
+    header_fg = row_fg = (
+        "var(--jp-ui-font-color1, var(--vscode-editor-foreground, #212529))"
+    )
 
     def row_bg(i: int) -> str:
         if i % 2 == 0:
