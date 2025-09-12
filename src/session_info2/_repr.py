@@ -107,15 +107,36 @@ def _fmt_html(header: _TableHeader, rows: Iterable[tuple[str, str]]) -> str:
     def strengthen(k: str) -> str:
         return f"<strong>{k}</strong>" if header[0] == "Package" else k
 
-    trs = "\n".join(
-        f"    <tr><td>{strengthen(k)}</td><td>{v}</td></tr>" for k, v in rows
-    )
-    if not trs:
+    rows_list = list(rows)
+    if not rows_list:
         return ""
+
+    header_bg = "var(--jp-layout-color0, var(--vscode-editor-background, #f8f9fa))"
+    header_fg = "var(--jp-ui-font-color1, var(--vscode-editor-foreground, #212529))"
+    row_fg = "var(--jp-ui-font-color1, var(--vscode-editor-foreground, #212529))"
+
+    def row_bg(i: int) -> str:
+        if i % 2 == 0:
+            return "var(--jp-layout-color2, var(--vscode-editor-background, #f8f9fa))"
+        return (
+            "var(--jp-layout-color3, "
+            "var(--vscode-tree-tableOddRowsBackground, #f1f3f4))"
+        )
+
+    trs = "\n".join(
+        f'    <tr style="background-color: {row_bg(i)}; color: {row_fg};">'
+        f"<td>{strengthen(k)}</td><td>{v}</td></tr>"
+        for i, (k, v) in enumerate(rows_list)
+    )
+
     th = f"    <tr><th>{header[0]}</th><th>{header[1]}</th></tr>"
-    bg = "var(--jp-layout-color0, var(--vscode-editor-background, white))"
-    style = f' style="position: sticky; top: 0; background-color: {bg};"'
-    return f"<thead{style}>\n{th}\n</thead>\n<tbody>\n{trs}\n</tbody>"
+    thead_style = (
+        f'style="position: sticky; top: 0; background-color: {header_bg}; '
+        f'color: {header_fg};"'
+    )
+    thead = f"<thead {thead_style}>\n{th}\n</thead>"
+
+    return f"{thead}\n<tbody>\n{trs}\n</tbody>"
 
 
 def repr_json(si: SessionInfo) -> str:
