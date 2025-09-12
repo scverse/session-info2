@@ -103,19 +103,40 @@ def _scrollable_table(inner: str) -> str:
     ).strip()
 
 
+COLORS = dict(
+    fg1="var(--jp-ui-font-color1, var(--vscode-editor-foreground, #212529))",
+    bg0="var(--jp-layout-color0, var(--vscode-editor-background, #f8f9fa))",
+    bg1="var(--jp-layout-color1, var(--vscode-editor-background, #f8f9fa))",
+    bg2="var(--jp-layout-color2, var(--vscode-tree-tableOddRowsBackground, #f1f3f4))",
+)
+
+
+def row_bg(i: int) -> str:
+    return COLORS["bg1" if i % 2 == 0 else "bg2"]
+
+
 def _fmt_html(header: _TableHeader, rows: Iterable[tuple[str, str]]) -> str:
     def strengthen(k: str) -> str:
         return f"<strong>{k}</strong>" if header[0] == "Package" else k
 
-    trs = "\n".join(
-        f"    <tr><td>{strengthen(k)}</td><td>{v}</td></tr>" for k, v in rows
-    )
-    if not trs:
+    rows_list = list(rows)
+    if not rows_list:
         return ""
+
+    trs = "\n".join(
+        f'    <tr style="background-color: {row_bg(i)}; color: {COLORS["fg1"]};">'
+        f"<td>{strengthen(k)}</td><td>{v}</td></tr>"
+        for i, (k, v) in enumerate(rows_list)
+    )
+
     th = f"    <tr><th>{header[0]}</th><th>{header[1]}</th></tr>"
-    bg = "var(--jp-layout-color0, var(--vscode-editor-background, white))"
-    style = f' style="position: sticky; top: 0; background-color: {bg};"'
-    return f"<thead{style}>\n{th}\n</thead>\n<tbody>\n{trs}\n</tbody>"
+    thead_style = (
+        f'style="position: sticky; top: 0; background-color: {COLORS["bg0"]}; '
+        f'color: {COLORS["fg1"]};"'
+    )
+    thead = f"<thead {thead_style}>\n{th}\n</thead>"
+
+    return f"{thead}\n<tbody>\n{trs}\n</tbody>"
 
 
 def repr_json(si: SessionInfo) -> str:
