@@ -28,7 +28,7 @@ repos:
   rev: v1.18.1
   hooks:
   - id: mypy
-    args: [--install-types, --non-interactive]
+    args: []
     additional_dependencies:
     - pytest
     - jupyter-client
