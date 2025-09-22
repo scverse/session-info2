@@ -24,9 +24,9 @@ classifiers = [
 dynamic = [ "description", "version" ]
 dependencies = [  ]
 optional-dependencies.docs = [
+  "click!=8.3",
   "furo",
   "hatch",
-  "click!=8.3.0",
   "myst-nb",
   "session-info2[notebook]",
   "sphinx",
