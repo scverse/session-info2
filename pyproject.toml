@@ -26,6 +26,7 @@ dependencies = [  ]
 optional-dependencies.docs = [
   "furo",
   "hatch",
+  "click!=8.3.0",
   "myst-nb",
   "session-info2[notebook]",
   "sphinx",
