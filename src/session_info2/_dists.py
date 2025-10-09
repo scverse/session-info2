@@ -33,6 +33,9 @@ def _top_level_editable(dist: Distribution) -> Generator[str, None, None]:
         for line in pth_file.read_text().splitlines():
             if re.match(r"^\s*(#|import\s)", line):
                 continue  # https://docs.python.org/3/library/site.html
+            path = Path(line)
+            if not path.is_absolute():
+                path = dist.locate_file(path)
             for p in Path(line).iterdir():
                 yield from _find_top_level(p)
 
