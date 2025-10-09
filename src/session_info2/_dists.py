@@ -35,7 +35,7 @@ def _top_level_editable(dist: Distribution) -> Generator[str, None, None]:
                 continue  # https://docs.python.org/3/library/site.html
             path = Path(line)
             if not path.is_absolute():
-                path = dist.locate_file(path)
+                continue
             for p in path.iterdir():
                 yield from _find_top_level(p)
 
