@@ -122,6 +122,7 @@ class SessionInfo:
         with catch_warnings():
             filterwarnings("ignore", category=DeprecationWarning)
             filterwarnings("ignore", category=FutureWarning)
+            filterwarnings("ignore", category=UserWarning)
             vs_attr = {
                 pkg_name: v
                 for pkg_name in self.dist2pkgs[dist]
