@@ -22,6 +22,7 @@ class Args(Namespace):
     os: bool
     cpu: bool
     gpu: bool
+    dependencies: bool
     format: Format
 
     @classmethod
@@ -40,6 +41,9 @@ class Args(Namespace):
             default=False,
             action=Ba,
             help="include information per supported GPU (disabled by default)",
+        )
+        parser.add_argument(
+            "--dependencies", default=True, action=Ba, help="include dependencies"
         )
         parser.add_argument(
             "-f",
@@ -63,7 +67,9 @@ def main(args_: list[str] | None = None, /) -> None:
     modules = {name: __import__(name) for name in args.packages}
 
     with patch.dict(sys.modules, __main__=type("__main__", (ModuleType,), modules)):
-        si = session_info(cpu=True, dependencies=True)
+        si = session_info(
+            os=args.os, cpu=args.cpu, gpu=args.gpu, dependencies=args.dependencies
+        )
 
     match args.format:
         case "text":
