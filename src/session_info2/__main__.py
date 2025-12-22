@@ -3,6 +3,6 @@
 
 from __future__ import annotations
 
-from . import session_info
+from .cli import main
 
-print(session_info(cpu=True, dependencies=True))
+main()

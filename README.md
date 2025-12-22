@@ -15,6 +15,8 @@ pip install session-info2
 See <https://session-info2.readthedocs.io/>
 In short:
 
+Use the `session-info` CLI program (see `session-info -h`) or use it programmatically:
+
 Import whayever your script/notebook relies on,
 as well as [session_info][].
 
