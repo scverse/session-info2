@@ -54,6 +54,7 @@ optional-dependencies.test = [
 urls.Documentation = "https://github.com/flying-sheep/session-info2#readme"
 urls.Issues = "https://github.com/flying-sheep/session-info2/issues"
 urls.Source = "https://github.com/flying-sheep/session-info2"
+scripts.session-info = "session_info2.cli:main"
 
 [tool.hatch.version]
 source = "vcs"
@@ -105,7 +106,7 @@ lint.per-file-ignores."**/*.ipynb" = [
 lint.per-file-ignores."docs/conf.py" = [
   "INP001", # __init__.py
 ]
-lint.per-file-ignores."src/session_info2/__main__.py" = [
+lint.per-file-ignores."src/session_info2/cli.py" = [
   "T201", # print is fine
 ]
 lint.per-file-ignores."tests/*" = [
