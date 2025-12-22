@@ -75,7 +75,7 @@ overrides.matrix.deps.features = [
 # installer = "uv"  # https://github.com/astral-sh/uv/issues/6032
 features = [ "notebook" ]
 extra-dependencies = [ "ipykernel" ]
-scripts.install-kernel = "python -m ipykernel install --user --name=session-info2 --display-name=session-info2"
+scripts.install-kernel = "python -m ipykernel install --user --name=session-info2 --display-name=session-info2 --env=COLUMNS=110"
 
 [tool.hatch.metadata.hooks.docstring-description]
 
