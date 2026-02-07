@@ -173,7 +173,10 @@ class SessionInfo:
 
         :param fmt: Format to use.
         """
-        return FMT_REPRS[fmt](self)
+        if formatter := FMT_REPRS.get(fmt):
+            return formatter(self)
+        msg = f"Unsupported format: {fmt!r}"
+        raise ValueError(msg)
 
     _repr_mimebundle_ = _repr_mimebundle
     widget = _widget
