@@ -8,7 +8,7 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, Literal, TypeAlias
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Container, Iterable, Mapping
+    from collections.abc import Callable, Container, Iterable, Mapping, Sequence
 
     from . import SessionInfo, _TableHeader
 
@@ -21,7 +21,11 @@ if TYPE_CHECKING:
         "application/json",
         MimeWidget,
     ]
+    _FmtCB = Callable[[SessionInfo], str]
     _ReprCB = Callable[[SessionInfo], str | dict[str, Any]]
+
+
+SupportedTextFormat: TypeAlias = Literal["text", "markdown", "html", "json"]
 
 
 MIME_WIDGET: MimeWidget = "application/vnd.jupyter.widget-view+json"
@@ -63,7 +67,7 @@ def repr_html(si: SessionInfo) -> str:
     return dedent(
         f"""
         {content}
-        {deps if deps else ""}
+        {deps or ""}
         <details>
             <summary>Copyable Markdown</summary>
             <pre>{repr_markdown(si)}</pre>
@@ -163,16 +167,18 @@ def repr_widget(si: SessionInfo) -> dict[str, str]:
     return widget_bundle[MIME_WIDGET]  # type: ignore[no-any-return]
 
 
-MIME_REPRS: Mapping[SupportedMime, _ReprCB] = MappingProxyType(
-    {
-        "text/plain": repr,
-        "text/markdown": repr_markdown,
-        "text/html": repr_html,
-        "application/json": repr_json,
-        MIME_WIDGET: repr_widget,
-    }
+TEXT_REPRS: Sequence[tuple[SupportedMime, SupportedTextFormat, _FmtCB]] = (
+    ("text/plain", "text", repr),
+    ("text/markdown", "markdown", repr_markdown),
+    ("text/html", "html", repr_html),
+    ("application/json", "json", repr_json),
 )
-
+MIME_REPRS: Mapping[SupportedMime, _ReprCB] = MappingProxyType(
+    {**{mime: repr_cb for mime, _, repr_cb in TEXT_REPRS}, MIME_WIDGET: repr_widget}
+)
+FMT_REPRS: Mapping[SupportedTextFormat, _FmtCB] = MappingProxyType(
+    {fmt: repr_cb for _, fmt, repr_cb in TEXT_REPRS}
+)
 
 DEFAULT_EXCLUDE = {"application/json"}
 

@@ -7,12 +7,10 @@ import sys
 from argparse import ArgumentParser, Namespace
 from argparse import BooleanOptionalAction as Ba
 from types import ModuleType
-from typing import Literal, get_args
+from typing import get_args
 from unittest.mock import patch
 
-from . import _repr, session_info
-
-Format = Literal["text", "markdown", "html", "json"]
+from . import SupportedTextFormat, session_info
 
 
 class Args(Namespace):
@@ -23,7 +21,7 @@ class Args(Namespace):
     cpu: bool
     gpu: bool
     dependencies: bool
-    format: Format
+    format: SupportedTextFormat
 
     @classmethod
     def parser(cls) -> ArgumentParser:
@@ -49,7 +47,7 @@ class Args(Namespace):
             "-f",
             "--format",
             default="text",
-            choices=get_args(Format),
+            choices=get_args(SupportedTextFormat),
             help="output format",
         )
         return parser
@@ -71,14 +69,4 @@ def main(args_: list[str] | None = None, /) -> None:
             os=args.os, cpu=args.cpu, gpu=args.gpu, dependencies=args.dependencies
         )
 
-    match args.format:
-        case "text":
-            print(si)
-        case "markdown":
-            print(_repr.repr_markdown(si))
-        case "html":
-            print(_repr.repr_html(si))
-        case "json":
-            print(_repr.repr_json(si))
-        case _:
-            raise AssertionError
+    print(si.format(args.format))
