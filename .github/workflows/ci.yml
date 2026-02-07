@@ -45,7 +45,7 @@ jobs:
     - run: uvx hatch env create ${{ matrix.env.name }}
     - uses: pavelzw/pytest-action@v2
       with:
-        custom-pytest: uvx hatch ${{ matrix.env.name }}:run --color=yes
+        custom-pytest: uvx hatch run ${{ matrix.env.name }}:run --color=yes
         click-to-expand: false
         verbose: true
         job-summary: true
