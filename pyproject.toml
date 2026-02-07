@@ -55,6 +55,7 @@ urls.Documentation = "https://github.com/flying-sheep/session-info2#readme"
 urls.Issues = "https://github.com/flying-sheep/session-info2/issues"
 urls.Source = "https://github.com/flying-sheep/session-info2"
 scripts.session-info = "session_info2.cli:main"
+scripts.session-info2 = "session_info2.cli:main" # So `uvx session-info2` works
 
 [tool.hatch.envs.docs]
 installer = "uv"
@@ -70,7 +71,7 @@ overrides.matrix.deps.features = [
 ]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = [ "3.10", "3.11", "3.12", "3.13" ]
+python = [ "3.14", "3.10" ]
 deps = [ "all", "min" ]
 
 [tool.hatch.envs.notebook]
