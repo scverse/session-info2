@@ -61,6 +61,8 @@ scripts.session-info2 = "session_info2.cli:main" # So `uvx session-info2` works
 installer = "uv"
 features = [ "docs" ]
 scripts.build = "sphinx-build -W --keep-going -b html docs docs/_build/html {args}"
+scripts.open = "python3 -m webbrowser -t docs/_build/html/index.html"
+scripts.clean = "git clean -fdX -- {args:docs}"
 
 [tool.hatch.envs.hatch-test]
 default-args = [  ]

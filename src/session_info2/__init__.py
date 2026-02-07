@@ -16,6 +16,7 @@ from warnings import catch_warnings, filterwarnings
 
 from . import _pu
 from ._dists import packages_distributions
+from ._repr import FMT_REPRS, SupportedTextFormat
 from ._repr import repr_mimebundle as _repr_mimebundle
 from ._ttl_cache import ttl_cache
 from ._widget import widget as _widget
@@ -29,6 +30,9 @@ if TYPE_CHECKING:
         | tuple[Literal["Dependency"], Literal["Version"]]
         | tuple[Literal["Component"], Literal["Info"]]
     )
+
+
+__all__ = ["SessionInfo", "SupportedTextFormat", "session_info"]
 
 
 # TODO: make this configurable
@@ -163,6 +167,13 @@ class SessionInfo:
             for _, part in self._table_parts(deps_default=False).items()
             if (part_fmt := "\n".join(f"{k}\t{v}" for k, v in part))
         )
+
+    def format(self, fmt: SupportedTextFormat, /) -> str:
+        """Generate text representation.
+
+        :param fmt: Format to use.
+        """
+        return FMT_REPRS[fmt](self)
 
     _repr_mimebundle_ = _repr_mimebundle
     widget = _widget
