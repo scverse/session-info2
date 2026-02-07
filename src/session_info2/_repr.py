@@ -167,18 +167,17 @@ def repr_widget(si: SessionInfo) -> dict[str, str]:
     return widget_bundle[MIME_WIDGET]  # type: ignore[no-any-return]
 
 
-REPRS: Sequence[tuple[SupportedMime, SupportedTextFormat | None, _ReprCB]] = (
+TEXT_REPRS: Sequence[tuple[SupportedMime, SupportedTextFormat, _FmtCB]] = (
     ("text/plain", "text", repr),
     ("text/markdown", "markdown", repr_markdown),
     ("text/html", "html", repr_html),
     ("application/json", "json", repr_json),
-    (MIME_WIDGET, None, repr_widget),
 )
 MIME_REPRS: Mapping[SupportedMime, _ReprCB] = MappingProxyType(
-    {mime: repr_cb for mime, _, repr_cb in REPRS}
+    {**{mime: repr_cb for mime, _, repr_cb in TEXT_REPRS}, MIME_WIDGET: repr_widget}
 )
 FMT_REPRS: Mapping[SupportedTextFormat, _FmtCB] = MappingProxyType(
-    {fmt: repr_cb for _, fmt, repr_cb in REPRS if fmt is not None}  # type: ignore[misc]
+    {fmt: repr_cb for _, fmt, repr_cb in TEXT_REPRS}
 )
 
 DEFAULT_EXCLUDE = {"application/json"}
