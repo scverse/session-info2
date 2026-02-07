@@ -24,24 +24,15 @@ classifiers = [
 ]
 dynamic = [ "description", "version" ]
 dependencies = [  ]
-optional-dependencies.docs = [
-  "click!=8.3",
-  "furo",
-  "hatch",
-  "myst-nb",
-  "session-info2[notebook]",
-  "sphinx",
-  "sphinx-autodoc-typehints",
-  "sphinx-codeautolink",
-]
 optional-dependencies.jupyter = [ "ipywidgets" ]
-# Dependencies needed to run the notebook
-optional-dependencies.notebook = [
-  "numpy",
-  "session-info",
-  "session-info2[jupyter]",
-]
-optional-dependencies.test = [
+urls.Documentation = "https://github.com/flying-sheep/session-info2#readme"
+urls.Issues = "https://github.com/flying-sheep/session-info2/issues"
+urls.Source = "https://github.com/flying-sheep/session-info2"
+scripts.session-info = "session_info2.cli:main"
+scripts.session-info2 = "session_info2.cli:main" # So `uvx session-info2` works
+
+[dependency-groups]
+test = [
   "coverage[toml]>=6.5",
   "ipykernel",
   "jupyter-client",
@@ -51,22 +42,36 @@ optional-dependencies.test = [
   "pytest-subprocess",
   "testing-common-database", # Example package as “test data”
 ]
-urls.Documentation = "https://github.com/flying-sheep/session-info2#readme"
-urls.Issues = "https://github.com/flying-sheep/session-info2/issues"
-urls.Source = "https://github.com/flying-sheep/session-info2"
-scripts.session-info = "session_info2.cli:main"
-scripts.session-info2 = "session_info2.cli:main" # So `uvx session-info2` works
+docs = [
+  "click!=8.3",
+  "furo",
+  "hatch",
+  "ipywidgets",
+  "myst-nb",
+  "session-info2[notebook]",
+  "sphinx",
+  "sphinx-autodoc-typehints",
+  "sphinx-codeautolink",
+]
+# Dependencies needed to run the notebook
+notebook = [
+  "numpy",
+  "session-info",
+  "session-info2[jupyter]",
+]
+
+[tool.hatch.envs.default]
+installer = "uv"
 
 [tool.hatch.envs.docs]
-installer = "uv"
-features = [ "docs" ]
+dependency-groups = [ "docs" ]
 scripts.build = "sphinx-build -W --keep-going -b html docs docs/_build/html {args}"
 scripts.open = "python3 -m webbrowser -t docs/_build/html/index.html"
 scripts.clean = "git clean -fdX -- {args:docs}"
 
 [tool.hatch.envs.hatch-test]
 default-args = [  ]
-features = [ "test" ]
+dependency-groups = [ "test" ]
 extra-dependencies = [ "pyinstrument" ]
 overrides.matrix.deps.features = [
   { if = [ "all" ], value = "jupyter" },
@@ -77,8 +82,7 @@ python = [ "3.14", "3.10" ]
 deps = [ "all", "min" ]
 
 [tool.hatch.envs.notebook]
-# installer = "uv"  # https://github.com/astral-sh/uv/issues/6032
-features = [ "notebook" ]
+dependency-groups = [ "notebook" ]
 extra-dependencies = [ "ipykernel" ]
 scripts.install-kernel = "python -m ipykernel install --user --name=session-info2 --display-name=session-info2 --env COLUMNS 110"
 
