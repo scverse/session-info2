@@ -10,40 +10,51 @@ env:
   JUPYTER_PLATFORM_DIRS: '1'
 
 jobs:
+  get-environments:
+    runs-on: ubuntu-latest
+    outputs:
+      envs: ${{ steps.get-envs.outputs.envs }}
+    steps:
+    - uses: actions/checkout@v6
+      with: { filter: blob:none, fetch-depth: 0 }
+    - uses: astral-sh/setup-uv@v7
+      with: { enable-cache: false }
+    - id: get-envs
+      run: |
+        ENVS_JSON=$(NO_COLOR=1 uvx hatch env show --json | jq -c 'to_entries
+          | map(
+            select(.key | startswith("hatch-test"))
+            | { name: .key, python: .value.python }
+          )')
+        echo "envs=${ENVS_JSON}" | tee $GITHUB_OUTPUT
+
   test:
+    needs: [get-environments]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - python-version: '3.10'
-          - python-version: '3.13'
-          - python-version: '3.13'
-            extras: min
+        env: ${{ fromJSON(needs.get-environments.outputs.envs) }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
+      with: { filter: blob:none, fetch-depth: 0 }
+    - uses: actions/setup-python@v6
       with:
-        fetch-depth: 0
-        filter: blob:none
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - uses: astral-sh/setup-uv@v6
-      with:
-        enable-cache: true
-    - run: uv pip install --system -e .[${{ matrix.extras == 'min' && 'test' || 'test,jupyter' }}]
+        python-version: ${{ matrix.env.python-version }}
+    - uses: astral-sh/setup-uv@v7
+      with: { enable-cache: true }
+    - run: uvx hatch env create ${{ matrix.env.name }}
     - uses: pavelzw/pytest-action@v2
       with:
-        custom-arguments: --color=yes
+        custom-pytest: uvx hatch run ${{ matrix.env.name }}:run --color=yes
         click-to-expand: false
         verbose: true
         job-summary: true
         emoji: false
   check:
     if: always()
-    needs:
-      - test
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
-        - uses: re-actors/alls-green@release/v1
-          with:
-            jobs: ${{ toJSON(needs) }}
+    - uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}
