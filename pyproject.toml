@@ -23,13 +23,13 @@ classifiers = [
   "Typing :: Typed",
 ]
 dynamic = [ "description", "version" ]
-dependencies = [  ]
+dependencies = []
 optional-dependencies.jupyter = [ "ipywidgets" ]
 urls.Documentation = "https://session-info2.readthedocs.io/"
 urls.Issues = "https://github.com/flying-sheep/session-info2/issues"
 urls.Source = "https://github.com/flying-sheep/session-info2"
 scripts.session-info = "session_info2.cli:main"
-scripts.session-info2 = "session_info2.cli:main" # So `uvx session-info2` works
+scripts.session-info2 = "session_info2.cli:main"  # So `uvx session-info2` works
 
 [dependency-groups]
 test = [
@@ -60,36 +60,23 @@ notebook = [
   "session-info2[jupyter]",
 ]
 
-[tool.hatch.envs.default]
-installer = "uv"
-
-[tool.hatch.envs.docs]
-dependency-groups = [ "docs" ]
-scripts.build = "sphinx-build -W --keep-going -b html docs docs/_build/html {args}"
-scripts.open = "python3 -m webbrowser -t docs/_build/html/index.html"
-scripts.clean = "git clean -fdX -- {args:docs}"
-
-[tool.hatch.envs.hatch-test]
-default-args = [  ]
-dependency-groups = [ "test" ]
-extra-dependencies = [ "pyinstrument" ]
-overrides.matrix.deps.features = [
+[tool.hatch]
+envs.default.installer = "uv"
+envs.docs.dependency-groups = [ "docs" ]
+envs.docs.scripts.build = "sphinx-build -W --keep-going -b html docs docs/_build/html {args}"
+envs.docs.scripts.open = "python3 -m webbrowser -t docs/_build/html/index.html"
+envs.docs.scripts.clean = "git clean -fdX -- {args:docs}"
+envs.hatch-test.default-args = []
+envs.hatch-test.dependency-groups = [ "test" ]
+envs.hatch-test.extra-dependencies = [ "pyinstrument" ]
+envs.hatch-test.overrides.matrix.deps.features = [
   { if = [ "all" ], value = "jupyter" },
 ]
-
-[[tool.hatch.envs.hatch-test.matrix]]
-python = [ "3.14", "3.10" ]
-deps = [ "all", "min" ]
-
-[tool.hatch.envs.notebook]
-dependency-groups = [ "notebook" ]
-extra-dependencies = [ "ipykernel" ]
-scripts.install-kernel = "python -m ipykernel install --user --name=session-info2 --display-name=session-info2 --env COLUMNS 110"
-
-[tool.hatch.metadata.hooks.docstring-description]
-
-[tool.hatch.version]
-source = "vcs"
+envs.hatch-test.matrix = [ { python = [ "3.14", "3.10" ], deps = [ "all", "min" ] } ]
+envs.notebook.dependency-groups = [ "notebook" ]
+envs.notebook.extra-dependencies = [ "ipykernel" ]
+envs.notebook.scripts.install-kernel = "python -m ipykernel install --user --name=session-info2 --display-name=session-info2 --env COLUMNS 110"
+version.source = "vcs"
 
 [tool.ruff]
 lint.select = [ "ALL" ]
@@ -131,28 +118,24 @@ lint.isort.required-imports = [ "from __future__ import annotations" ]
 lint.pylint.max-args = 7
 lint.pylint.max-positional-args = 3
 
-[tool.pytest.ini_options]
-addopts = [ "--import-mode=importlib", "--strict-markers" ]
-asyncio_mode = "auto"
-asyncio_default_fixture_loop_scope = "session"
-filterwarnings = [
+[tool.pytest]
+ini_options.addopts = [ "--import-mode=importlib", "--strict-markers" ]
+ini_options.asyncio_mode = "auto"
+ini_options.asyncio_default_fixture_loop_scope = "session"
+ini_options.filterwarnings = [
   "error",
   "ignore:Jupyter is migrating its paths:DeprecationWarning",
   "ignore:datetime.datetime.utcfromtimestamp:DeprecationWarning:dateutil",
 ]
 
-[tool.coverage.paths]
-session_info2 = [ "src/session_info2", "*/session-info2/src/session_info2" ]
-tests = [ "tests", "*/session-info2/tests" ]
-
-[tool.coverage.report]
-exclude_lines = [ "no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:" ]
-
-[tool.coverage.run]
-source_pkgs = [ "session_info2", "tests" ]
-branch = true
-parallel = true
-omit = [  ]
+[tool.coverage]
+run.branch = true
+run.omit = []
+run.parallel = true
+run.source_pkgs = [ "session_info2", "tests" ]
+paths.session_info2 = [ "src/session_info2", "*/session-info2/src/session_info2" ]
+paths.tests = [ "tests", "*/session-info2/tests" ]
+report.exclude_lines = [ "if __name__ == .__main__.:", "if TYPE_CHECKING:", "no cov" ]
 
 [tool.mypy]
 strict = true
@@ -163,5 +146,5 @@ mypy_path = [ "$MYPY_CONFIG_FILE_DIR/stubs", "$MYPY_CONFIG_FILE_DIR/src" ]
 stubPath = "./stubs"
 reportPrivateUsage = false
 
-[tool.esbonio.sphinx]
-pythonCommand = [ "hatch", "-e", "docs", "run", "python" ]
+[tool.esbonio]
+sphinx.pythonCommand = [ "hatch", "-e", "docs", "run", "python" ]
