@@ -76,6 +76,7 @@ envs.hatch-test.matrix = [ { python = [ "3.14", "3.10" ], deps = [ "all", "min" 
 envs.notebook.dependency-groups = [ "notebook" ]
 envs.notebook.extra-dependencies = [ "ipykernel" ]
 envs.notebook.scripts.install-kernel = "python -m ipykernel install --user --name=session-info2 --display-name=session-info2 --env COLUMNS 110"
+metadata.hooks.docstring-description = {}
 version.source = "vcs"
 
 [tool.ruff]
