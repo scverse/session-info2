@@ -120,10 +120,11 @@ lint.pylint.max-args = 7
 lint.pylint.max-positional-args = 3
 
 [tool.pytest]
-ini_options.addopts = [ "--import-mode=importlib", "--strict-markers" ]
-ini_options.asyncio_mode = "auto"
-ini_options.asyncio_default_fixture_loop_scope = "session"
-ini_options.filterwarnings = [
+strict = true
+addopts = [ "--import-mode=importlib" ]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+filterwarnings = [
   "error",
   "ignore:Jupyter is migrating its paths:DeprecationWarning",
   "ignore:datetime.datetime.utcfromtimestamp:DeprecationWarning:dateutil",
