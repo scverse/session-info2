@@ -119,6 +119,15 @@ lint.isort.required-imports = [ "from __future__ import annotations" ]
 lint.pylint.max-args = 7
 lint.pylint.max-positional-args = 3
 
+[tool.mypy]
+strict = true
+explicit_package_bases = true
+mypy_path = [ "$MYPY_CONFIG_FILE_DIR/stubs", "$MYPY_CONFIG_FILE_DIR/src" ]
+
+[tool.pyright]
+stubPath = "./stubs"
+reportPrivateUsage = false
+
 [tool.pytest]
 strict = true
 addopts = [ "--import-mode=importlib" ]
@@ -138,15 +147,6 @@ run.source_pkgs = [ "session_info2", "tests" ]
 paths.session_info2 = [ "src/session_info2", "*/session-info2/src/session_info2" ]
 paths.tests = [ "tests", "*/session-info2/tests" ]
 report.exclude_lines = [ "if __name__ == .__main__.:", "if TYPE_CHECKING:", "no cov" ]
-
-[tool.mypy]
-strict = true
-explicit_package_bases = true
-mypy_path = [ "$MYPY_CONFIG_FILE_DIR/stubs", "$MYPY_CONFIG_FILE_DIR/src" ]
-
-[tool.pyright]
-stubPath = "./stubs"
-reportPrivateUsage = false
 
 [tool.esbonio]
 sphinx.pythonCommand = [ "hatch", "-e", "docs", "run", "python" ]
