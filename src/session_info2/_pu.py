@@ -16,11 +16,10 @@ def cpu_info() -> str:
     total_cores = cpu_count()
     if sys.version_info >= (3, 13):
         avail_cores = os.process_cpu_count()
+    elif platform.system() == "Linux":
+        avail_cores = len(os.sched_getaffinity(0))
     else:
-        if platform.system() == "Linux":
-            avail_cores = len(os.sched_getaffinity(0))
-        else:
-            avail_cores = total_cores
+        avail_cores = total_cores
     return f"{avail_cores}/{total_cores} logical CPU cores{f', {proc}' if proc else ''}"
 
 
