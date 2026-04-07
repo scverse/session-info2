@@ -12,7 +12,15 @@ from subprocess import CalledProcessError, run
 def cpu_info() -> str:
     """Get CPU info."""
     proc = platform.processor() or None
-    return f"{cpu_count()} logical CPU cores{f', {proc}' if proc else ''}"
+    total_cores = cpu_count()
+    try:
+        available_cores = os.process_cpu_count()
+    except AttributeError:
+        try:
+            available_cores = len(os.sched_getaffinity(0))
+        except AttributeError:
+            available_cores = total_cores
+    return f"{available_cores}/{total_cores} logical CPU cores{f', {proc}' if proc else ''}"
 
 
 def gpu_info() -> tuple[str, ...]:
