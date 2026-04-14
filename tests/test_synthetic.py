@@ -94,7 +94,7 @@ def test_markdown(
 ) -> None:
     user_globals = {re.split(r"[.:]", p)[-1]: import_path(p) for p in imports}
 
-    si = SessionInfo(pkg2dists | dep2dists, user_globals)  # type: ignore[operator]  # https://github.com/python/mypy/issues/21141
+    si = SessionInfo(pkg2dists | dep2dists, user_globals)
     parts = _repr.repr_markdown(si).split("\n\n")
     pkg_str: str | None
     dep_str: str | None
