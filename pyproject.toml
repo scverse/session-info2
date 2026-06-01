@@ -61,23 +61,23 @@ notebook = [
 ]
 
 [tool.hatch]
+version.source = "vcs"
+metadata.hooks.docstring-description = {}
 envs.default.installer = "uv"
-envs.docs.dependency-groups = [ "docs" ]
 envs.docs.scripts.build = "sphinx-build -W --keep-going -b html docs docs/_build/html {args}"
-envs.docs.scripts.open = "python3 -m webbrowser -t docs/_build/html/index.html"
 envs.docs.scripts.clean = "git clean -fdX -- {args:docs}"
+envs.docs.scripts.open = "python3 -m webbrowser -t docs/_build/html/index.html"
+envs.docs.dependency-groups = [ "docs" ]
+envs.hatch-test.extra-dependencies = [ "pyinstrument" ]
+envs.hatch-test.matrix = [ { python = [ "3.14", "3.10" ], deps = [ "all", "min" ] } ]
+envs.hatch-test.overrides.matrix.deps.features = [
+  { value = "jupyter", if = [ "all" ] },
+]
 envs.hatch-test.default-args = []
 envs.hatch-test.dependency-groups = [ "test" ]
-envs.hatch-test.extra-dependencies = [ "pyinstrument" ]
-envs.hatch-test.overrides.matrix.deps.features = [
-  { if = [ "all" ], value = "jupyter" },
-]
-envs.hatch-test.matrix = [ { python = [ "3.14", "3.10" ], deps = [ "all", "min" ] } ]
-envs.notebook.dependency-groups = [ "notebook" ]
 envs.notebook.extra-dependencies = [ "ipykernel" ]
 envs.notebook.scripts.install-kernel = "python -m ipykernel install --user --name=session-info2 --display-name=session-info2 --env COLUMNS 110"
-metadata.hooks.docstring-description = {}
-version.source = "vcs"
+envs.notebook.dependency-groups = [ "notebook" ]
 
 [tool.ruff]
 lint.select = [ "ALL" ]
@@ -120,24 +120,24 @@ lint.pylint.max-args = 7
 lint.pylint.max-positional-args = 3
 
 [tool.mypy]
-strict = true
-explicit_package_bases = true
 mypy_path = [ "$MYPY_CONFIG_FILE_DIR/stubs", "$MYPY_CONFIG_FILE_DIR/src" ]
+explicit_package_bases = true
+strict = true
 
 [tool.pyright]
 stubPath = "./stubs"
 reportPrivateUsage = false
 
 [tool.pytest]
-strict = true
 addopts = [ "--import-mode=importlib" ]
-asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
+asyncio_mode = "auto"
 filterwarnings = [
   "error",
   "ignore:Jupyter is migrating its paths:DeprecationWarning",
   "ignore:datetime.datetime.utcfromtimestamp:DeprecationWarning:dateutil",
 ]
+strict = true
 
 [tool.coverage]
 run.branch = true
