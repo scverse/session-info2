@@ -13,7 +13,7 @@ build:
     - asdf install uv latest
     - asdf global uv latest
     # https://github.com/pypa/hatch/pull/2351
-    - uv tool install 'hatch @ git+https://github.com/pypa/hatch.git@af5339a1a5bb8e6d4b659c4c1bfff8e7e37cdaff'
+    - uv tool install --force --reinstall 'hatch @ git+https://github.com/pypa/hatch.git@af5339a1a5bb8e6d4b659c4c1bfff8e7e37cdaff'
     build:
       html:
       - ~/.local/bin/hatch run docs:build
