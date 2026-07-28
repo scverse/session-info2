@@ -13,8 +13,9 @@ build:
     - asdf install uv latest
     - asdf global uv latest
     # https://github.com/pypa/hatch/pull/2351
-    - uv tool install --force --reinstall 'git+https://github.com/pypa/hatch.git@af5339a1a5bb8e6d4b659c4c1bfff8e7e37cdaff'
+    - uv tool install --force --reinstall "git+https://github.com/pypa/hatch.git@af5339a1a5bb8e6d4b659c4c1bfff8e7e37cdaff"
     build:
       html:
+      - grep -n "local_metadata|get_dependencies" "$(uv tool dir)"/hatch/lib/python*/site-packages/hatch/env/plugin/interface.py
       - /home/docs/.local/bin/hatch run docs:build
       - mv docs/_build $READTHEDOCS_OUTPUT
