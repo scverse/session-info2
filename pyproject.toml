@@ -45,7 +45,7 @@ test = [
 docs = [
   "click>=8.3.1",
   "furo",
-  "hatch",
+  "hatch @ git+https://github.com/pypa/hatch.git@af5339a1a5bb8e6d4b659c4c1bfff8e7e37cdaff",
   "ipywidgets",
   "myst-nb>=1.3",
   "session-info2[notebook]",
@@ -69,7 +69,15 @@ envs.docs.scripts.clean = "git clean -fdX -- {args:docs}"
 envs.docs.scripts.open = "python3 -m webbrowser -t docs/_build/html/index.html"
 envs.docs.dependency-groups = [ "docs" ]
 envs.hatch-test.extra-dependencies = [ "pyinstrument" ]
-envs.hatch-test.matrix = [ { python = [ "3.14", "3.10" ], deps = [ "all", "min" ] } ]
+envs.hatch-test.matrix = [
+  { python = [
+    "3.14",
+    "3.10",
+  ], deps = [
+    "all",
+    "min",
+  ] },
+]
 envs.hatch-test.overrides.matrix.deps.features = [
   { value = "jupyter", if = [ "all" ] },
 ]
@@ -144,9 +152,16 @@ run.branch = true
 run.omit = []
 run.parallel = true
 run.source_pkgs = [ "session_info2", "tests" ]
-paths.session_info2 = [ "src/session_info2", "*/session-info2/src/session_info2" ]
+paths.session_info2 = [
+  "src/session_info2",
+  "*/session-info2/src/session_info2",
+]
 paths.tests = [ "tests", "*/session-info2/tests" ]
-report.exclude_lines = [ "if __name__ == .__main__.:", "if TYPE_CHECKING:", "no cov" ]
+report.exclude_lines = [
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "no cov",
+]
 
 [tool.esbonio]
 sphinx.pythonCommand = [ "hatch", "-e", "docs", "run", "python" ]
