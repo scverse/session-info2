@@ -14,7 +14,7 @@ build:
     - asdf global uv latest
     # https://github.com/pypa/hatch/pull/2351
     - uv tool install git+https://github.com/pypa/hatch.git@af5339a1a5bb8e6d4b659c4c1bfff8e7e37cdaff
-    - uv tool update-shell
+    - echo $PATH
     build:
       html:
       - hatch run docs:build
