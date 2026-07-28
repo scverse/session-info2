@@ -40,6 +40,7 @@ if TYPE_CHECKING:
     ],
 )
 def test_repr(
+    *,
     import_path: Callable[[str], Any],
     pkg2dists: dict[str, list[str]],
     imports: list[str],
@@ -157,7 +158,7 @@ def test_gpu(fp: FakeProcess) -> None:
     ]
 
 
-def assert_markdown_segment(
+def assert_markdown_segment(  # noqa: PLR0917
     cols: _TableHeader,
     content: str,
     name2dists: Mapping[str, Iterable[str]],
