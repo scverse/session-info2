@@ -4,8 +4,8 @@
 from __future__ import annotations
 
 import os
-from functools import partial
 from importlib.metadata import metadata
+from shutil import which
 from subprocess import run
 
 _info = metadata("session_info2")
@@ -61,20 +61,6 @@ nb_execution_mode = "force"
 nb_execution_show_tb = True
 # For debugging: nb_execution_timeout = -1
 
-
 # https://github.com/executablebooks/MyST-NB/issues/574
-def _patch_myst_nb() -> None:
-    from jupyter_cache.executors import utils  # type: ignore[import-not-found]
-    from myst_nb.core.execute import cache, direct  # type: ignore[import-not-found]
-
-    run(
-        ["hatch", "-v", "run", "notebook:install-kernel"],
-        check=True,
-    )
-
-    cache.single_nb_execution = direct.single_nb_execution = partial(
-        utils.single_nb_execution, kernel_name="session-info2"
-    )
-
-
-_patch_myst_nb()
+print(which("hatch"))  # noqa: T201
+run(["hatch", "-v", "run", "notebook:install-kernel"], check=True)
