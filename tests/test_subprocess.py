@@ -96,6 +96,12 @@ async def execute(
         from importlib import reload
         reload(site)
         %reset
+        import contextlib
+        import sys
+        for _mod in list(sys.modules.values()):
+            with contextlib.suppress(AttributeError, TypeError):
+                del _mod.__warningregistry__
+        del contextlib, sys, _mod
         """
     )
 
