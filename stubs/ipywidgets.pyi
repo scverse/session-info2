@@ -3,9 +3,9 @@ from collections.abc import Callable, Container, Sequence
 from contextlib import AbstractContextManager
 from dataclasses import KW_ONLY, dataclass
 from types import TracebackType
-from typing import Any, Generic, Literal, TypeAlias, TypedDict, TypeVar
+from typing import Any, Literal, TypedDict, TypeVar
 
-_CssProperties: TypeAlias = Literal["inherit", "initial", "unset"]
+type _CssProperties = Literal["inherit", "initial", "unset"]
 
 class Widget:
     def _repr_mimebundle_(
@@ -184,14 +184,12 @@ class LabelStyle(_StringStyle, TypedDict, total=False):
     font_weight: str | None
     text_decoration: str | None
 
-_StringStyleBound = TypeVar("_StringStyleBound", bound=_StringStyle)
-
 @dataclass
-class String(Widget, Generic[_StringStyleBound]):
+class String[S: _StringStyle](Widget):
     value: str
     _: KW_ONLY
     placeholder: str = ...
-    style: _StringStyleBound = ...
+    style: S = ...
 
 class HTML(String[_StringStyle]): ...
 class HTMLMath(String[_StringStyle]): ...

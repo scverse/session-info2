@@ -3,9 +3,10 @@ from __future__ import annotations
 
 import json
 import warnings
+from pathlib import Path
 from textwrap import dedent, indent
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, Literal, TypeAlias
+from typing import TYPE_CHECKING, Any, Literal
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Container, Iterable, Mapping, Sequence
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
     MimeWidget = Literal["application/vnd.jupyter.widget-view+json"]
 
-    SupportedMime: TypeAlias = Literal[
+    type SupportedMime = Literal[
         "text/plain",
         "text/markdown",
         "text/html",
@@ -25,10 +26,12 @@ if TYPE_CHECKING:
     _ReprCB = Callable[[SessionInfo], str | dict[str, Any]]
 
 
-SupportedTextFormat: TypeAlias = Literal["text", "markdown", "html", "json"]
+type SupportedTextFormat = Literal["text", "markdown", "html", "json"]
 
 
 MIME_WIDGET: MimeWidget = "application/vnd.jupyter.widget-view+json"
+
+_PKG_DIR = str(Path(__file__).parent)
 
 
 def repr_markdown(si: SessionInfo) -> str:
@@ -84,10 +87,9 @@ def repr_html_parts(si: SessionInfo) -> tuple[str, str | None]:
         if (part := _fmt_html(header, rows))
     }
     shown_parts = [part for header, part in parts.items() if header[0] != "Dependency"]
-    nl = "\n"  # Python 3.10 can’t do backslashes in f-strings
     content = f"""
         <table class=table>
-        {indent(nl.join(shown_parts), " " * 4)}
+        {indent("\n".join(shown_parts), " " * 4)}
         </table>
         """
     if deps := parts.get(("Dependency", "Version")):
@@ -209,5 +211,5 @@ def repr_mimebundle(
                 f"Failed to import dependencies for {mime} representation. "
                 f"({type(e).__name__}: {e})"
             )
-            warnings.warn(msg, RuntimeWarning, stacklevel=8)
+            warnings.warn(msg, RuntimeWarning, skip_file_prefixes=(_PKG_DIR,))
     return mb

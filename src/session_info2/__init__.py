@@ -7,11 +7,11 @@ import platform
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from functools import cached_property
 from importlib.metadata import version
 from types import MappingProxyType, ModuleType
-from typing import TYPE_CHECKING, Any, Literal, TypeAlias
+from typing import TYPE_CHECKING, Any, Literal
 from warnings import catch_warnings, filterwarnings
 
 from . import _pu
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from collections.abc import Collection, Generator, Iterable, Mapping, Sequence
     from collections.abc import Set as AbstractSet
 
-    _TableHeader: TypeAlias = (
+    type _TableHeader = (
         tuple[Literal["Package"], Literal["Version"]]
         | tuple[Literal["Dependency"], Literal["Version"]]
         | tuple[Literal["Component"], Literal["Info"]]
@@ -47,7 +47,7 @@ class _AdditionalInfo:
     cpu: str | None = field(default_factory=_pu.cpu_info)
     gpu: Collection[str] = field(default_factory=_pu.gpu_info)
     date: str = field(
-        default_factory=lambda: datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M")
+        default_factory=lambda: datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M")
     )
 
     def _table(self) -> Generator[tuple[str, str], None, None]:
