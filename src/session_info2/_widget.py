@@ -18,7 +18,7 @@ def widget(si: SessionInfo) -> Widget:
     import ipywidgets as widgets
 
     try:
-        from IPython.display import Javascript  # type: ignore[import-not-found]
+        from IPython.display import Javascript
     except ImportError:
         return widgets.HTML(value=repr_html(si))
 
@@ -28,7 +28,7 @@ def widget(si: SessionInfo) -> Widget:
         layout=widgets.Layout(width="auto"),
     )
     output = widgets.Output(layout=widgets.Layout(display="none"))
-    copy_md = Javascript(_clipboard_js(si, "text/markdown"))
+    copy_md = Javascript(_clipboard_js(si, "text/markdown"))  # type: ignore[no-untyped-call]
 
     def on_click(_: widgets.Button) -> None:
         output.clear_output()

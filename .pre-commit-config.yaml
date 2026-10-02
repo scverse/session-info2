@@ -3,7 +3,9 @@ repos:
   rev: v6.0.0
   hooks:
   - id: trailing-whitespace
+    groups: [format]
   - id: end-of-file-fixer
+    groups: [format]
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.16.9
   hooks:
@@ -12,24 +14,28 @@ repos:
   - id: ruff-check
     args: [--preview, --select=CPY]
   - id: ruff-format
+    groups: [format]
 - repo: https://github.com/tox-dev/pyproject-fmt
   rev: v2.29.4
   hooks:
     - id: pyproject-fmt
+      groups: [format]
 - repo: https://github.com/biomejs/pre-commit
   rev: v2.5.14
   hooks:
   - id: biome-format
+    groups: [format]
 - repo: https://github.com/kynan/nbstripout
   rev: "0.9.1"
   hooks:
     - id: nbstripout
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v2.3.1
+- repo: local
   hooks:
   - id: mypy
-    args: []
-    additional_dependencies:
-    - pytest
-    - jupyter-client
-    - pytest-subprocess
+    name: mypy
+    entry: hatch check types
+    language: system
+    types_or: [python, pyi]
+    require_serial: true
+    pass_filenames: false
+    groups: [typecheck]
