@@ -49,7 +49,7 @@ def simple_msg(msg: dict[str, Any]) -> SimpleMsg | None:
 
 
 @pytest.fixture(scope="session")
-async def kernel_client() -> AsyncGenerator[AsyncKernelClient, None]:
+async def kernel_client() -> AsyncGenerator[AsyncKernelClient]:
     km, kc = await start_new_async_kernel(kernel_name="python3")
     yield kc
     kc.stop_channels()
@@ -59,7 +59,7 @@ async def kernel_client() -> AsyncGenerator[AsyncKernelClient, None]:
 @pytest.fixture
 async def execute(
     kernel_client: AsyncKernelClient, libdir_test: Path
-) -> AsyncGenerator[Execute, None]:
+) -> AsyncGenerator[Execute]:
     async def execute(code: str) -> list[SimpleMsg]:
         await kernel_client.wait_for_ready()
         msgs: list[dict[str, Any]] = []

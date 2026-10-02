@@ -25,7 +25,7 @@ def libdir_test(monkeypatch: pytest.MonkeyPatch) -> Path:
 
 
 @pytest.fixture
-def import_path(libdir_test: Path) -> Generator[Callable[[str], Any], None, None]:
+def import_path(libdir_test: Path) -> Generator[Callable[[str], Any]]:
     del libdir_test  # used for side effects
     added_modules: set[str] = set()
 

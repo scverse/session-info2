@@ -25,7 +25,7 @@ def packages_distributions() -> Mapping[str, list[str]]:
     return pds
 
 
-def _top_level_editable(dist: Distribution) -> Generator[str, None, None]:
+def _top_level_editable(dist: Distribution) -> Generator[str]:
     """Find top-level packages in an editable distribution."""
     for pth_file in dist.files or ():
         if len(pth_file.parts) != 1 or pth_file.suffix != ".pth":
@@ -42,7 +42,7 @@ def _top_level_editable(dist: Distribution) -> Generator[str, None, None]:
                 yield from _find_top_level(p)
 
 
-def _find_top_level(root: Path) -> Generator[str, None, None]:
+def _find_top_level(root: Path) -> Generator[str]:
     if root.suffix == ".py" and "." not in root.stem and root.is_file():
         yield root.stem
         return
