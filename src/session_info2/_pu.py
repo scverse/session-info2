@@ -4,7 +4,6 @@ from __future__ import annotations
 import os
 import platform
 import shutil
-import sys
 from multiprocessing import cpu_count
 from pathlib import WindowsPath
 from subprocess import CalledProcessError, run
@@ -14,12 +13,7 @@ def cpu_info() -> str:
     """Get CPU info."""
     proc = platform.processor() or None
     total_cores = cpu_count()
-    if sys.version_info >= (3, 13):
-        avail_cores = os.process_cpu_count()
-    elif platform.system() == "Linux":
-        avail_cores = len(os.sched_getaffinity(0))
-    else:
-        avail_cores = total_cores
+    avail_cores = os.process_cpu_count()
     return f"{avail_cores}/{total_cores} logical CPU cores{f', {proc}' if proc else ''}"
 
 

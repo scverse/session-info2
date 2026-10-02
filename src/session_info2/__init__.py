@@ -50,7 +50,7 @@ class _AdditionalInfo:
         default_factory=lambda: datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M")
     )
 
-    def _table(self) -> Generator[tuple[str, str], None, None]:
+    def _table(self) -> Generator[tuple[str, str]]:
         yield ("Python", self.sys)
         if self.os:
             yield ("OS", self.os)
@@ -217,7 +217,7 @@ def _get_module_name(obj: object) -> str:
     return type(obj).__module__
 
 
-def _mods(mod_name: str) -> Generator[str, None, None]:
+def _mods(mod_name: str) -> Generator[str]:
     """Generate parent module names, starting with input."""
     parts = mod_name.split(".")
     for i in reversed(range(len(parts))):
