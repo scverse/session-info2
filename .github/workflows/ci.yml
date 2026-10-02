@@ -27,7 +27,6 @@ jobs:
             | { name: .key, python: .value.python }
           )')
         echo "envs=${ENVS_JSON}" | tee $GITHUB_OUTPUT
-
   test:
     needs: [get-environments]
     runs-on: ubuntu-latest
