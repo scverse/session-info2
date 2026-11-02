@@ -1,22 +1,22 @@
 {
-	"[json][jsonc][python]": {
-		"editor.formatOnSave": true,
-	},
-	"[json][jsonc]": {
-		"editor.defaultFormatter": "biomejs.biome",
-	},
-	"[python]": {
-		"editor.defaultFormatter": "charliermarsh.ruff",
-		"editor.codeActionsOnSave": {
-			"source.fixAll": "always",
-			"source.organizeImports": "always",
-		},
-	},
-	"python.testing.pytestArgs": ["--color=yes", "-vv"],
-	"python.testing.pytestEnabled": true,
-	// mirror settings from pyproject-fmt
-	"evenBetterToml.formatter.compactArrays": false,
-	"evenBetterToml.formatter.arrayAutoCollapse": false,
-	"python-envs.defaultEnvManager": "pypa.hatch:hatch",
-	"python-envs.defaultPackageManager": "pypa.hatch:hatch",
+    "[json][jsonc][python]": {
+        "editor.formatOnSave": true,
+    },
+    "[json][jsonc]": {
+        "editor.defaultFormatter": "biomejs.biome",
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "always",
+            "source.organizeImports": "always",
+        },
+    },
+    "python.testing.pytestArgs": ["--color=yes", "-vv"],
+    "python.testing.pytestEnabled": true,
+    // mirror settings from pyproject-fmt
+    "evenBetterToml.formatter.compactArrays": false,
+    "evenBetterToml.formatter.arrayAutoCollapse": false,
+    "python-envs.defaultEnvManager": "pypa.hatch:hatch",
+    "python-envs.defaultPackageManager": "pypa.hatch:hatch",
 }
