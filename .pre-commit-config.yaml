@@ -25,6 +25,11 @@ repos:
     hooks:
       - id: biome-format
         groups: [format]
+  - repo: https://github.com/jolars/panache-pre-commit
+    rev: v3.18.0
+    hooks:
+      - id: panache-format
+        groups: [format]
   - repo: https://github.com/kynan/nbstripout
     rev: "0.9.1"
     hooks:

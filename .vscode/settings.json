@@ -1,9 +1,12 @@
 {
-    "[json][jsonc][python]": {
+    "[json][jsonc][python][yaml][markdown]": {
         "editor.formatOnSave": true,
     },
-    "[json][jsonc]": {
+    "[json][jsonc][yaml]": {
         "editor.defaultFormatter": "biomejs.biome",
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "jolars.panache",
     },
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff",
